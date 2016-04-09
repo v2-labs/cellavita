@@ -28,16 +28,16 @@ echo "
 echo "
 <VirtualHost *:80>
     ServerName cellavita.test
-    DocumentRoot $DOCUMENT_ROOT_ZEND/client/public
+    DocumentRoot $DOCUMENT_ROOT_ZEND/web/public
     SetEnv APPLICATION_ENV 'development'
-    <Directory $DOCUMENT_ROOT_ZEND/client/public>
+    <Directory $DOCUMENT_ROOT_ZEND/web/public>
         DirectoryIndex index.php
         AllowOverride All
         Order allow,deny
         Allow from all
     </Directory>
 </VirtualHost>
-" > /etc/apache2/sites-available/cellavita_client.conf
+" > /etc/apache2/sites-available/cellavita_web.conf
 echo "
 192.168.83.11   cellavita.test      cellavita.test
 192.168.83.11   cellavita-api.test  cellavita-api.test
@@ -52,7 +52,7 @@ mysqladmin -u root password root
 mysql -u root -proot --execute "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' with GRANT OPTION; FLUSH PRIVILEGES;"
 service mysql restart
 cd /var/www/cellavita
-for site in api client; do
+for site in api web; do
     pushd ${site} > /dev/null
     if [[ ! -f composer.phar ]]; then
         curl -Ss https://getcomposer.org/installer | php
