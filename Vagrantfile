@@ -46,7 +46,7 @@ sed -i "s/^bind-address/#bind-address/g" /etc/mysql/my.cnf
 a2enmod rewrite
 a2dissite 000-default
 a2ensite cellavita_api
-a2ensite cellavita_client
+a2ensite cellavita_web
 service apache2 restart
 mysqladmin -u root password root
 mysql -u root -proot --execute "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' with GRANT OPTION; FLUSH PRIVILEGES;"
