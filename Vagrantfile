@@ -10,8 +10,11 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'vmware_fusion'
 @script = <<SCRIPT
 DOCUMENT_ROOT_ZEND="/var/www/cellavita"
 apt-get update
+apt-get install -y debconf-utils
 apt-get install -y apache2 git curl php5-cli php5 php5-intl libapache2-mod-php5
-apt-get install -y php5-mysql mysql-server mysql-client
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+apt-get install -y mysql-server mysql-client php5-mysql
 echo "
 <VirtualHost *:80>
     ServerName cellavita-api.test
@@ -48,7 +51,6 @@ a2dissite 000-default
 a2ensite cellavita_api
 a2ensite cellavita_web
 service apache2 restart
-mysqladmin -u root password root
 mysql -u root -proot --execute "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' with GRANT OPTION; FLUSH PRIVILEGES;"
 service mysql restart
 cd /var/www/cellavita
