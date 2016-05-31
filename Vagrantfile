@@ -3,12 +3,13 @@
 
 VAGRANTFILE_API_VERSION = '2'
 
-# Set our default provider for this Vagrantfile to 'vmware_appcatalyst'
-#ENV['VAGRANT_DEFAULT_PROVIDER'] = 'vmware_appcatalyst'
+# Set our default provider for this Vagrantfile
+# ('vmware_appcatalyst','vmware_fusion','vmware_desktop')
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'vmware_fusion'
 
 @script = <<SCRIPT
 DOCUMENT_ROOT_ZEND="/var/www/cellavita"
+apt-mark hold linux-image
 apt-get update
 apt-get install -y debconf-utils
 apt-get install -y apache2 git curl php5-cli php5 php5-intl libapache2-mod-php5
@@ -64,19 +65,29 @@ for site in api web; do
     php composer.phar install --no-progress
     popd > /dev/null
 done
+mysql -u root -proot < /var/www/cellavita/support-files/mysql-base-data.sql > \
+                       /var/www/cellavita/support-files/mysql-base-data.log 2>&1
 echo "** [Project] Visit http://cellavita in your browser to view the application **"
 SCRIPT
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = 'v2lab/trusty64'
-  config.vm.network 'private_network', ip: "192.168.83.11"
-  config.vm.hostname = 'cellavita-devel'
-  config.vm.synced_folder '.', '/var/www/cellavita'
-  config.vm.provision 'shell', inline: @script
+node = {
+  box: 'v2lab/trusty64',
+  machine: 'cellavita',
+  hostname: 'cellavita-devel',
+}
 
-  # Configure our boxes with 1 CPU and 1GB of RAM
-  config.vm.provider 'vmware_fusion' do |v|
-    v.cpus = '1'
-    v.memory = '1024'
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define node[:machine] do |node_config|
+    node_config.vm.box = node[:box]
+    node_config.vm.network 'private_network', ip: "192.168.83.11"
+    node_config.vm.hostname = node[:hostname]
+    node_config.vm.synced_folder '.', '/var/www/cellavita'
+    node_config.vm.provision 'shell', inline: @script
+
+    # Configure our boxes with 1 CPU and 1GB of RAM
+    node_config.vm.provider 'vmware_fusion' do |v|
+      v.cpus = '1'
+      v.memory = '1024'
+    end
   end
 end
