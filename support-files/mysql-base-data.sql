@@ -4,7 +4,7 @@ USE `cellavita`;
 --
 -- Host: 192.168.83.11    Database: cellavita
 -- ------------------------------------------------------
--- Server version	5.5.47-0ubuntu0.14.04.1
+-- Server version	5.5.49-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -57,6 +57,7 @@ DROP TABLE IF EXISTS `cells`;
 CREATE TABLE `cells` (
   `donor_id` int(11) NOT NULL,
   `cell_id` int(11) NOT NULL,
+  `cells_allotment` varchar(45) NOT NULL,
   PRIMARY KEY (`donor_id`,`cell_id`),
   CONSTRAINT `fk_cells_donors1` FOREIGN KEY (`donor_id`) REFERENCES `donors` (`donor_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -93,6 +94,34 @@ CREATE TABLE `conditions` (
 LOCK TABLES `conditions` WRITE;
 /*!40000 ALTER TABLE `conditions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `conditions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cultures`
+--
+
+DROP TABLE IF EXISTS `cultures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cultures` (
+  `cell_id` int(11) NOT NULL,
+  `donor_id` int(11) NOT NULL,
+  `stage_id` int(11) NOT NULL,
+  PRIMARY KEY (`cell_id`,`donor_id`,`stage_id`),
+  KEY `fk_cultures_stages1_idx` (`stage_id`),
+  KEY `fk_cultures_cells1` (`donor_id`,`cell_id`),
+  CONSTRAINT `fk_cultures_cells1` FOREIGN KEY (`donor_id`, `cell_id`) REFERENCES `cells` (`donor_id`, `cell_id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk_cultures_stages1` FOREIGN KEY (`stage_id`) REFERENCES `stages` (`stage_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cultures`
+--
+
+LOCK TABLES `cultures` WRITE;
+/*!40000 ALTER TABLE `cultures` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cultures` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -133,6 +162,33 @@ INSERT INTO `donors` VALUES (1,'Juvenal A. Silva Jr.','17908673X','SSP','0783464
 UNLOCK TABLES;
 
 --
+-- Table structure for table `exams`
+--
+
+DROP TABLE IF EXISTS `exams`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `exams` (
+  `donor_id` int(11) NOT NULL,
+  `exam_id` int(11) NOT NULL,
+  `exam_pdf` blob,
+  `exam_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`donor_id`,`exam_id`),
+  KEY `fk_exams_donors1_idx` (`donor_id`),
+  CONSTRAINT `fk_exams_donors1` FOREIGN KEY (`donor_id`) REFERENCES `donors` (`donor_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `exams`
+--
+
+LOCK TABLES `exams` WRITE;
+/*!40000 ALTER TABLE `exams` DISABLE KEYS */;
+/*!40000 ALTER TABLE `exams` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `stage_types`
 --
 
@@ -140,14 +196,12 @@ DROP TABLE IF EXISTS `stage_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stage_types` (
+  `stage_id` int(11) NOT NULL,
   `stage_type` int(11) NOT NULL,
-  `stages_stage_id` int(11) NOT NULL,
   `stage_type_name` varchar(45) NOT NULL,
-  PRIMARY KEY (`stage_type`,`stages_stage_id`),
-  UNIQUE KEY `stage_type_UNIQUE` (`stage_type`),
-  UNIQUE KEY `stage_type_name_UNIQUE` (`stage_type_name`),
-  KEY `fk_stage_types_stages1_idx` (`stages_stage_id`),
-  CONSTRAINT `fk_stage_types_stages1` FOREIGN KEY (`stages_stage_id`) REFERENCES `stages` (`stage_id`) ON UPDATE CASCADE
+  PRIMARY KEY (`stage_id`,`stage_type`),
+  KEY `fk_stage_types_stages1_idx` (`stage_id`),
+  CONSTRAINT `fk_stage_types_stages1` FOREIGN KEY (`stage_id`) REFERENCES `stages` (`stage_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -194,8 +248,8 @@ DROP TABLE IF EXISTS `telephones`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `telephones` (
   `donor_id` int(11) NOT NULL,
-  `phone_id` varchar(45) NOT NULL,
-  `phone_type` varchar(45) DEFAULT NULL,
+  `phone_id` int(11) NOT NULL,
+  `phone_type` varchar(5) DEFAULT NULL,
   `phone_number` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`donor_id`,`phone_id`),
   CONSTRAINT `fk_telephones_donor1` FOREIGN KEY (`donor_id`) REFERENCES `donors` (`donor_id`) ON UPDATE CASCADE
@@ -208,6 +262,7 @@ CREATE TABLE `telephones` (
 
 LOCK TABLES `telephones` WRITE;
 /*!40000 ALTER TABLE `telephones` DISABLE KEYS */;
+INSERT INTO `telephones` VALUES (1,1,'RES','1938568433'),(1,2,'CEL','19997204321');
 /*!40000 ALTER TABLE `telephones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-18 19:40:59
+-- Dump completed on 2016-06-17 23:28:29
