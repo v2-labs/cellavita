@@ -3,8 +3,8 @@
 
 VAGRANTFILE_API_VERSION = '2'
 
-# Set our default provider for this Vagrantfile
-# ('vmware_appcatalyst','vmware_fusion','vmware_desktop')
+# Set our default provider for this Vagrantfile to 'vmware_fusion', this setting
+# will match vmware_appcatalyst, vmware_fusion and vmware_desktop
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'vmware_fusion'
 
 @script = <<SCRIPT
@@ -85,7 +85,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node_config.vm.provision 'shell', inline: @script
 
     # Configure our boxes with 1 CPU and 1GB of RAM
-    node_config.vm.provider 'vmware_fusion' do |v|
+    node_config.vm.provider 'vmware' do |v|
       v.cpus = '1'
       v.memory = '1024'
     end
