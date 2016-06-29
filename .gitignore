@@ -3,3 +3,4 @@
 .attic
 vendor/
 *.log
+*.bak
