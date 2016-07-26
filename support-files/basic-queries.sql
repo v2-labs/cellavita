@@ -1,0 +1,10 @@
+use cellavita;
+select * from donors;
+select * from exams;
+select * from stages;
+select * from travels;
+select * from cultures;
+select * from vaccines;
+select * from addresses;
+select * from telephones;
+alter table `cellavita`.`cultures` add index `fk_cultures_cells1_idx` (`donor_id` ASC, `cell_id` ASC);

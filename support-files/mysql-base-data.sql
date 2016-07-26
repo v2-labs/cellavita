@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `cellavita` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `cellavita`;
 -- MySQL dump 10.13  Distrib 5.7.9, for osx10.9 (x86_64)
 --
 -- Host: 192.168.83.11    Database: cellavita
 -- ------------------------------------------------------
--- Server version	5.5.49-0ubuntu0.14.04.1
+-- Server version	5.5.50-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -44,6 +42,7 @@ CREATE TABLE `addresses` (
 
 LOCK TABLES `addresses` WRITE;
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
+INSERT INTO `addresses` VALUES (1,1,'Alameda Guarani, 944','Res. Vale Sta. Fe','Sao Paulo','Vinhedo','13280-000'),(2,1,'Alameda Guarani, 944','Res. Vale Sta. Fe','Sao Paulo','Vinhedo','13280-000');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +108,7 @@ CREATE TABLE `cultures` (
   `stage_id` int(11) NOT NULL,
   PRIMARY KEY (`cell_id`,`donor_id`,`stage_id`),
   KEY `fk_cultures_stages1_idx` (`stage_id`),
-  KEY `fk_cultures_cells1` (`donor_id`,`cell_id`),
+  KEY `fk_cultures_cells1_idx` (`donor_id`,`cell_id`),
   CONSTRAINT `fk_cultures_cells1` FOREIGN KEY (`donor_id`, `cell_id`) REFERENCES `cells` (`donor_id`, `cell_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_cultures_stages1` FOREIGN KEY (`stage_id`) REFERENCES `stages` (`stage_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -157,7 +156,7 @@ CREATE TABLE `donors` (
 
 LOCK TABLES `donors` WRITE;
 /*!40000 ALTER TABLE `donors` DISABLE KEYS */;
-INSERT INTO `donors` VALUES (1,'Juvenal A. Silva Jr.','17908673X','SSP','07834645846','SRF','masc','108','185','19681220','BR','BR','Juvenal A. Silva','Celina dos Santos Silva','Software Engineer');
+INSERT INTO `donors` VALUES (1,'Juvenal A. Silva Jr.','17908673X','SSP','07834645846','SRF','M','108','185','19681220','BR','BR','Juvenal A. Silva','Celina dos Santos Silva','Software Engineer'),(2,'Marcia Christina Sonevesso Silva','17XXX882','SSP','09487934812','SRF','F','88','154','19670619','BR','BR','Moacir Sonevesso','Neire Maria Toledo Sonevesso','Professora');
 /*!40000 ALTER TABLE `donors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,6 +184,7 @@ CREATE TABLE `exams` (
 
 LOCK TABLES `exams` WRITE;
 /*!40000 ALTER TABLE `exams` DISABLE KEYS */;
+INSERT INTO `exams` VALUES (1,1,NULL,'2016-05-22 00:00:00'),(1,2,NULL,'2016-06-01 00:00:00');
 /*!40000 ALTER TABLE `exams` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,7 +262,7 @@ CREATE TABLE `telephones` (
 
 LOCK TABLES `telephones` WRITE;
 /*!40000 ALTER TABLE `telephones` DISABLE KEYS */;
-INSERT INTO `telephones` VALUES (1,1,'RES','1938568433'),(1,2,'CEL','19997204321');
+INSERT INTO `telephones` VALUES (1,1,'RES','1938568433'),(1,2,'CEL','19997204321'),(2,1,'RES','1938568433'),(2,2,'CEL','19998243797');
 /*!40000 ALTER TABLE `telephones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,6 +291,7 @@ CREATE TABLE `travels` (
 
 LOCK TABLES `travels` WRITE;
 /*!40000 ALTER TABLE `travels` DISABLE KEYS */;
+INSERT INTO `travels` VALUES (1,1,'2016-05-23','França, Paris','2w'),(2,1,'2015-08-20','New York, USA','10d');
 /*!40000 ALTER TABLE `travels` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -303,7 +304,7 @@ DROP TABLE IF EXISTS `vaccines`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vaccines` (
   `donor_id` int(11) NOT NULL,
-  `vaccine_type` int(11) NOT NULL,
+  `vaccine_type` varchar(20) NOT NULL,
   `vaccine_date` varchar(45) DEFAULT NULL,
   `vaccine_dose` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`donor_id`,`vaccine_type`),
@@ -318,6 +319,7 @@ CREATE TABLE `vaccines` (
 
 LOCK TABLES `vaccines` WRITE;
 /*!40000 ALTER TABLE `vaccines` DISABLE KEYS */;
+INSERT INTO `vaccines` VALUES (1,'TRP1','2000-08-22','1'),(1,'TRP2','2001-08-19','2');
 /*!40000 ALTER TABLE `vaccines` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,4 +340,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-17 23:28:29
+-- Dump completed on 2016-07-25 22:11:07
