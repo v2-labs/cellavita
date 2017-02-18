@@ -1,0 +1,6 @@
+version: 2
+services:
+  db:
+    image: cellavita-mysql
+  web:
+    image: cellavita-web
