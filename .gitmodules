@@ -1,6 +1,6 @@
 [submodule "api"]
 	path = api
-	url = git@github.com:v2-labs/cellavita-api.git
+	url = https://github.com/v2-labs/cellavita-api.git
 [submodule "web"]
 	path = web
-	url = git@github.com:v2-labs/cellavita-web.git
+	url = https://github.com/v2-labs/cellavita-web.git
