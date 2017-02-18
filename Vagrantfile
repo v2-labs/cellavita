@@ -18,7 +18,7 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again p
 apt-get install -y mysql-server mysql-client php5-mysql
 echo "
 <VirtualHost *:80>
-    ServerName cellavita-api.test
+    ServerName cellavita-api.local
     DocumentRoot $DOCUMENT_ROOT_ZEND/api/public
     SetEnv APPLICATION_ENV 'development'
     <Directory $DOCUMENT_ROOT_ZEND/api/public>
@@ -31,7 +31,7 @@ echo "
 " > /etc/apache2/sites-available/cellavita_api.conf
 echo "
 <VirtualHost *:80>
-    ServerName cellavita.test
+    ServerName cellavita.local
     DocumentRoot $DOCUMENT_ROOT_ZEND/web/public
     SetEnv APPLICATION_ENV 'development'
     <Directory $DOCUMENT_ROOT_ZEND/web/public>
@@ -43,8 +43,8 @@ echo "
 </VirtualHost>
 " > /etc/apache2/sites-available/cellavita_web.conf
 echo "
-192.168.83.11   cellavita.test      cellavita.test
-192.168.83.11   cellavita-api.test  cellavita-api.test
+192.168.83.11   cellavita.local      cellavita.local
+192.168.83.11   cellavita-api.local  cellavita-api.local
 " >> /etc/hosts
 sed -i "s/^bind-address/#bind-address/g" /etc/mysql/my.cnf
 a2enmod rewrite
