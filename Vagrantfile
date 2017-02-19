@@ -67,7 +67,7 @@ for site in api web; do
 done
 mysql -u root -proot < /var/www/cellavita/support-files/mysql-base-data.sql > \
                        /var/www/cellavita/support-files/mysql-base-data.log 2>&1
-echo "** [Project] Visit http://cellavita in your browser to view the application **"
+echo "** [Project] Visit http://cellavita.local in your browser to view the application **"
 SCRIPT
 
 node = {
